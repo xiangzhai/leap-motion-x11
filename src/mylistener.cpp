@@ -67,7 +67,7 @@ void MyListener::onFrame(const Controller& controller)
 
     for (int g = 0; g < gestures.count(); ++g) {
         Gesture gesture = gestures[g];
-
+        // FIXME: 我发现Swip手势基本操作不出来？！
         //std::cout << gesture.type() << std::endl;
         switch (gesture.type()) {
         case Gesture::TYPE_KEY_TAP:
