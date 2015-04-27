@@ -67,13 +67,15 @@ void MyListener::onFrame(const Controller& controller)
 
     for (int g = 0; g < gestures.count(); ++g) {
         Gesture gesture = gestures[g];
-        // FIXME: 我发现Swip手势基本操作不出来？！
-        //std::cout << gesture.type() << std::endl;
         switch (gesture.type()) {
         case Gesture::TYPE_KEY_TAP:
         case Gesture::TYPE_SCREEN_TAP:
             if (m_tapped)
                 m_tapped();
+            break;
+        // FIXME: 我发现Swip手势很难操作不出来?!
+        case Gesture::TYPE_SWIPE:
+            std::cout << "swip" << time(NULL) << std::endl;
             break;
         }
     }
