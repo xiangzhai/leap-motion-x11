@@ -58,9 +58,17 @@ void MyListener::onFrame(const Controller& controller)
         const Hand hand = *hl;
         Vector position = hand.palmPosition();
 
+        if (m_preY == -200.0)
+            m_preY = position[1];
         if (m_positionChanged)
             m_positionChanged(position[0], position[1], position[2], 
                               frame.fingers().extended().count());
+
+        // 手掌向下移动也可以模拟成TAP手势
+        if (position[1] < m_preY && m_preY - position[1] > 5.0 && m_tapped)
+            m_tapped();
+
+        m_preY = position[1];
     }
 
     for (int g = 0; g < gestures.count(); ++g) {
