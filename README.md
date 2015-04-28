@@ -31,12 +31,14 @@ sudo make install
 leap-motion-x11
 ```
 
-* 用（小于等于）4根手指头做向上的动作，触发KDE4左上角热区，在活跃窗体之间游走，
-点击某个窗体，抬起该窗体
+* 在水平面，向左、右移动手掌
+
+* 在水平面，用（小于等于）4根手指头做向上的动作，触发KDE4左上角热区，
+在活跃窗体之间游走，点击某个窗体，抬起该窗体
 
 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
 
-* 移动手掌，用食指做点击动作 ;-)
+* 在水平面，移动手掌，用食指做点击动作 ;-)
 
 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
 
