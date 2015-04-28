@@ -1,10 +1,10 @@
 leap-motion-x11
 ----------------
 
-Leap Motion与X11交互，类似激光键盘 laserkbd http://www.robopeak.com/blog/?p=315
+Leap Motion interactive with X11, just like [laser keyboard] (http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似激光键盘 http://www.robopeak.com/blog/?p=315
 
 
-## 依赖 4 ArchLinux
+## Dependence for ArchLinux 依赖
 
 * archlinux-leap-motion-driver 
 https://gitcafe.com/xiangzhai/archlinux-leap-motion-driver
@@ -16,7 +16,7 @@ https://gitcafe.com/xiangzhai/archlinux-leap-motion-sdk
 sudo pacman -S libxtst
 ```
 
-## 编译、安装
+## Build && Install 编译、安装
 
 ```
 cmake . -DCMAKE_INSTALL_PREFIX=/usr
@@ -25,20 +25,23 @@ sudo make install
 ```
 
 
-## 与X11交互
+## Interactive with X11 与X11交互
 
 ```
 leap-motion-x11
 ```
 
-* 在水平面，向左、右移动手掌
+* In the X and Z axis, move hand left/rightwards 在水平面，向左、右移动手掌
 
-* 在水平面，用（小于等于）4根手指头做向上的动作，触发KDE4左上角热区，
+* In the X and Z axis, move hand with (or less than ) 4 fingers upwards, emit 
+the left top corner hot zone, move hand in the active windows, click one window 
+to raise it KDE4在水平面，用（小于等于）4根手指头做向上的动作，触发KDE4左上角热区，
 在活跃窗体之间游走，点击某个窗体，抬起该窗体
 
-演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
+Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
 
-* 在水平面，移动手掌，用食指做点击动作 ;-)
+* In the X and Z axis, move hand and click by your finger 在水平面，移动手掌，
+用食指做点击动作
 
-演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
+Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
 
