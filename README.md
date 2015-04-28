@@ -3,6 +3,16 @@ leap-motion-x11
 
 Leap Motion interactive with X11, just like [laser keyboard] (http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘] (http://www.robopeak.com/blog/?p=315)
 
+It uses:
+
+* palmPosition to move MOUSE CURSOR by XWarpPointer, and generate KEY PRESS event by XTestFakeKeyEvent;
+* Gesture::TYPE_KEY_TAP and Gesture::TYPE_SCREEN_TAP gestures to generate MOUSE CLICK event by XQueryPointer and XSendEvent;
+
+so it is able to interactive with KDE, a famous desktop environment based on X11 for Linux:
+* move and left click the mouse
+* emit left top corner hot zone (hot key)
+* generate left and right key press event when viewing photo or presentation
+
 
 ## Dependence for ArchLinux 依赖
 
