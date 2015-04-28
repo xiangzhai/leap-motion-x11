@@ -12,6 +12,9 @@ https://gitcafe.com/xiangzhai/archlinux-leap-motion-driver
 * archlinux-leap-motion-sdk 
 https://gitcafe.com/xiangzhai/archlinux-leap-motion-sdk
 
+```
+sudo pacman -S libxtst
+```
 
 ## 编译、安装
 

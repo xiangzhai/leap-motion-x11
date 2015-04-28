@@ -11,6 +11,7 @@
 static Display* display = nullptr;
 static Window root = -1;
 static bool quit = false;
+static float m_preX = -200.0;
 static float m_preZ = -200.0;
 
 static void sig_handler(int sig)
@@ -21,13 +22,16 @@ static void sig_handler(int sig)
     }
 }
 
-// Leap Motion 手掌坐标 https://developer.leapmotion.com/documentation/cpp/api/Leap.Vector.html#cppstruct_leap_1_1_vector 
+// 
+// TODO: Leap Motion 手掌坐标 https://developer.leapmotion.com/documentation/cpp/api/Leap.Vector.html#cppstruct_leap_1_1_vector 
 // 东、西方向上是X轴，南、北是Z轴，上、下是Y轴
 // 在X、Y轴的“经验”（尝试出来的，文档上貌似没有介绍？！）区间是[-100, 100] 
 // 但是当手掌位于“边缘”比如-100时
 // Gesture::TYPE_KEY_TAP 手势就不准了！所以需要把区间缩小！[-70, 70]
 // 坐标转换到当前分辨率下的X11“屏幕”坐标系
+//
 // FIXME: 由于手掌是有轻微抖动的，所以需要做曲线拟合（平滑）使得鼠标移动更加平滑
+//
 static void positionChanged(float x, 
                             float y, 
                             float z, 
@@ -39,6 +43,24 @@ static void positionChanged(float x,
     
     //std::cout << x << ", " << z << ", " << count << std::endl;
 
+    if (m_preX == -200.0) 
+        m_preX = x;
+    if (x < m_preX && m_preX - x > 5.0) {
+        KeyCode leftKeyCode = XKeysymToKeycode(display, XK_Left);
+
+        XTestFakeKeyEvent(display, leftKeyCode, True, 0);
+        XTestFakeKeyEvent(display, leftKeyCode, False, 0);
+        XFlush(display);
+    } else if (m_preX < x && x - m_preX > 5.0) {
+        KeyCode rightKeyCode = XKeysymToKeycode(display, XK_Right);
+
+        XTestFakeKeyEvent(display, rightKeyCode, True, 0);
+        XTestFakeKeyEvent(display, rightKeyCode, False, 0);
+        XFlush(display);
+    }
+
+    if (m_preZ == -200.0) 
+        m_preZ = z;
     // 最好能带上加速度做为评估值
     if (z < m_preZ && m_preZ - z > 5.0) {
         // 如果伸开的手指个数小于4，在KDE4下触发Ctrl+F8唤出左上角热区
@@ -60,6 +82,7 @@ static void positionChanged(float x,
                  (z + 70) * screenHeight / 140);
     XFlush(display);
     
+    m_preX = x;
     m_preZ = z;
 }
 

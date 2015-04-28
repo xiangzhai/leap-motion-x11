@@ -82,7 +82,7 @@ void MyListener::onFrame(const Controller& controller)
             break;
         // FIXME: 我发现Swip手势很难操作出来?!
         case Gesture::TYPE_SWIPE:
-            std::cout << "swip" << time(NULL) << std::endl;
+            std::cout << "swip " << time(NULL) << std::endl;
             break;
         }
     }
