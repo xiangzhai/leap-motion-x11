@@ -48,12 +48,14 @@ sudo make install
 leap-motion-x11
 ```
 
-* In the X and Z axis, move hand left/rightwards 在水平面，向左、右移动手掌
+* In the X and Z axis, move hand left/rightwards very fast, emit left and right 
+key press event when viewing photo or presentation 在水平面，向左、右快速移动
+手掌，触发向左、右键盘事件，可以用来看图片、ppt
 
-* In the X and Z axis, move hand with (or less than ) 4 fingers upwards, emit 
-the left top corner hot zone, move hand in the active windows, click one window 
-to raise it KDE4在水平面，用（小于等于）4根手指头做向上的动作，触发KDE4左上角热区，
-在活跃窗体之间游走，点击某个窗体，抬起该窗体
+* In the X and Z axis, move hand upwards very fast, emit the left top corner 
+hot zone, move hand in the active windows, click one window to raise it for KDE
+在水平面，快速做向上的动作，触发KDE左上角热区，在活跃窗体之间游走，点击某个窗体，
+抬起该窗体
 
 Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
 
