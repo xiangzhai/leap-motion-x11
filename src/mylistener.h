@@ -7,7 +7,8 @@
 
 using namespace Leap;
 
-typedef void (*PositionChanged)(float, float, float, int, int);
+typedef void (*PositionChanged)(float, float, float, int, Vector direction, 
+                                Vector velcity);
 typedef void (*Tapped)();
 
 class MyListener : public Listener 

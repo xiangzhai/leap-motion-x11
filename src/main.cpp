@@ -8,14 +8,12 @@
 
 #include "mylistener.h"
 
-static const float velcityFilter = 10.0;
+static const float velcityFilter = 400.0;
 
 static Display* display = nullptr;
 static Window root = -1;
 static bool quit = false;
-static float m_preX = -200.0;
-static float m_preZ = -200.0;
-static int m_preTimestamp = 0;
+static bool isCtrlF10 = false;
 
 static void sig_handler(int sig)
 {
@@ -23,11 +21,6 @@ static void sig_handler(int sig)
         std::cout << "Bye ;-)" << std::endl;
         quit = true;
     }
-}
-
-static float velcity(float deltaDisplace, int deltaTime) 
-{
-    return deltaTime == 0 ? 0 : deltaDisplace / deltaTime * 10000;
 }
 
 // 
@@ -46,8 +39,8 @@ static float velcity(float deltaDisplace, int deltaTime)
 // 但是当手掌位于“边缘”比如-100时
 // 
 // Such Gesture::TYPE_KEY_TAP gesture is not accurate! so it needs to decrease 
-// the range, for example [-70, 70] 
-// 手势就不准了！所以需要把区间缩小！[-70, 70]
+// the range, for example [-60, 60] 
+// 手势就不准了！所以需要把区间缩小！[-60, 60]
 // 
 // Matrix transform to current X11 screen resoluation 
 // 坐标转换到当前分辨率下的X11“屏幕”坐标系
@@ -57,69 +50,72 @@ static float velcity(float deltaDisplace, int deltaTime)
 // mouse cursor movement more smooth 
 // 由于手掌是有轻微抖动的，所以需要做曲线拟合（平滑）使得鼠标移动更加平滑
 //
-static void positionChanged(float x, 
-                            float y, 
-                            float z, 
-                            int count/* extend fingers count 伸开的手指个数 */, 
-                            int timestamp) 
+static void positionChanged(float x, float y, float z, int extendedFingers, 
+                            Vector direction, Vector velcity) 
 {
     int screen = 0;
     int screenWidth = DisplayWidth(display, screen);
     int screenHeight = DisplayHeight(display, screen);
 
-    if (m_preTimestamp == 0)
-        m_preTimestamp = timestamp;
+    // Pitch is the angle between the negative z-axis and the projection of the 
+    // vector onto the y-z plane. In other words, pitch represents rotation 
+    // around the x-axis. If the vector points upward, the returned angle is 
+    // between 0 and pi radians (180 degrees); if it points downward, the angle 
+    // is between 0 and -pi radians.
+    // 围绕着X轴，向上、下
+    //std::cout << direction.pitch() << std::endl;
+    
+    // Yaw is the angle between the negative z-axis and the projection of the 
+    // vector onto the x-z plane. In other words, yaw represents rotation around 
+    // the y-axis. If the vector points to the right of the negative z-axis, 
+    // then the returned angle is between 0 and pi radians (180 degrees); 
+    // if it points to the left, the angle is between 0 and -pi radians.
+    // 围绕着Y轴，在水平面上向左、右
+    //std::cout << direction.yaw() << std::endl;
 
-    if (m_preX == -200.0) 
-        m_preX = x;
+    // Roll is the angle between the y-axis and the projection of the vector 
+    // onto the x-y plane. In other words, roll represents rotation around the 
+    // z-axis. If the vector points to the left of the y-axis, then the returned 
+    // angle is between 0 and pi radians (180 degrees); if it points to the 
+    // right, the angle is between 0 and -pi radians.
+    // 围绕着Z轴向左、右翻转
+    //std::cout << direction.roll() << std::endl;
 
-    if (m_preZ == -200.0)
-        m_preZ = z;
+    if (velcity[0] > velcityFilter) {
+        std::cout << "Emit rightwards" << std::endl;
+        KeyCode leftKeyCode = XKeysymToKeycode(display, XK_Left);
 
-    if (abs(x - m_preX) > abs(z - m_preZ)) {
-        if (x < m_preX && 
-            velcity(m_preX - x, timestamp - m_preTimestamp) > velcityFilter) {
-            std::cout << "Emit rightwards" << std::endl;
-            KeyCode leftKeyCode = XKeysymToKeycode(display, XK_Left);
+        XTestFakeKeyEvent(display, leftKeyCode, True, 0);
+        XTestFakeKeyEvent(display, leftKeyCode, False, 0);
+        XFlush(display);
+    } else if (velcity[0] < -velcityFilter) {
+        std::cout << "Emit leftwards" << std::endl;
+        KeyCode rightKeyCode = XKeysymToKeycode(display, XK_Right);
 
-            XTestFakeKeyEvent(display, leftKeyCode, True, 0);
-            XTestFakeKeyEvent(display, leftKeyCode, False, 0);
-            XFlush(display);
-        } else if (m_preX < x && 
-                   velcity(x - m_preX, timestamp - m_preTimestamp) > velcityFilter) {
-            std::cout << "Emit leftwards" << std::endl;
-            KeyCode rightKeyCode = XKeysymToKeycode(display, XK_Right);
-
-            XTestFakeKeyEvent(display, rightKeyCode, True, 0);
-            XTestFakeKeyEvent(display, rightKeyCode, False, 0);
-            XFlush(display);
-        }
-    } else {
-        if (z < m_preZ && 
-            velcity(m_preZ - z, timestamp - m_preTimestamp) > velcityFilter) {
-            // emit left top corner hot zone for KDE 
-            // 在KDE下触发Ctrl+F10唤出左上角热区
-            std::cout << "Emit left top corner hot zone" << std::endl;
-            KeyCode ctrlKeyCode = XKeysymToKeycode(display, XK_Control_L);
-            KeyCode f10KeyCode = XKeysymToKeycode(display, XK_F10);
-            
-            XTestFakeKeyEvent(display, ctrlKeyCode, True, 0);
-            XTestFakeKeyEvent(display, f10KeyCode, True, 0);
-            XTestFakeKeyEvent(display, f10KeyCode, False, 0);
-            XTestFakeKeyEvent(display, ctrlKeyCode, False, 0);
-            XFlush(display);
-        }
+        XTestFakeKeyEvent(display, rightKeyCode, True, 0);
+        XTestFakeKeyEvent(display, rightKeyCode, False, 0);
+        XFlush(display);
     }
 
+    if (velcity[2] < -velcityFilter && !isCtrlF10) {
+        isCtrlF10 = true;
+        std::cout << "Emit left top corner hot zone" << std::endl;
+        KeyCode ctrlKeyCode = XKeysymToKeycode(display, XK_Control_L);
+        KeyCode f10KeyCode = XKeysymToKeycode(display, XK_F10);
+            
+        XTestFakeKeyEvent(display, ctrlKeyCode, True, 0);
+        XTestFakeKeyEvent(display, f10KeyCode, True, 0);
+        XTestFakeKeyEvent(display, f10KeyCode, False, 0);
+        XTestFakeKeyEvent(display, ctrlKeyCode, False, 0);
+        XFlush(display);
+    }
+
+    // Move mouse cursor 
     // 移动鼠标
     XSelectInput(display, root, KeyReleaseMask);
-    XWarpPointer(display, None, root, 0, 0, 0, 0, (x + 70) * screenWidth / 140, 
-                 (z + 70) * screenHeight / 140);
+    XWarpPointer(display, None, root, 0, 0, 0, 0, (x + 60) * screenWidth / 120, 
+                 (z + 60) * screenHeight / 120);
     XFlush(display);
-    
-    m_preX = x;
-    m_preZ = z;
-    m_preTimestamp = timestamp;
 }
 
 static void mouseClick(
@@ -164,6 +160,7 @@ static void mouseClick(
 
 static void tapped() 
 {
+    isCtrlF10 = false;
     std::cout << "Emit mouse click" << std::endl;
     mouseClick();
 }

@@ -63,7 +63,8 @@ void MyListener::onFrame(const Controller& controller)
         if (m_positionChanged)
             m_positionChanged(position[0], position[1], position[2], 
                               frame.fingers().extended().count(), 
-                              frame.timestamp());
+                              hand.direction(),
+                              hand.palmVelocity());
 
         m_preY = position[1];
     }
@@ -76,9 +77,8 @@ void MyListener::onFrame(const Controller& controller)
             if (m_tapped)
                 m_tapped();
             break;
-        // FIXME: 我发现Swip手势很难操作出来?!
         case Gesture::TYPE_SWIPE:
-            std::cout << "swip " << time(NULL) << std::endl;
+            std::cout << "Swip gesture is very difficult to experience?!" << std::endl;
             break;
         }
     }
