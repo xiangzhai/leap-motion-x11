@@ -65,10 +65,6 @@ void MyListener::onFrame(const Controller& controller)
                               frame.fingers().extended().count(), 
                               frame.timestamp());
 
-        // 手掌向下移动也可以模拟成TAP手势
-        if (position[1] < m_preY && m_preY - position[1] > 5.0 && m_tapped)
-            m_tapped();
-
         m_preY = position[1];
     }
 

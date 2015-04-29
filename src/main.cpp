@@ -8,7 +8,7 @@
 
 #include "mylistener.h"
 
-static const float velcityFilter = 6.0;
+static const float velcityFilter = 10.0;
 
 static Display* display = nullptr;
 static Window root = -1;
@@ -72,37 +72,43 @@ static void positionChanged(float x,
 
     if (m_preX == -200.0) 
         m_preX = x;
-    if (x < m_preX && 
-        velcity(m_preX - x, timestamp - m_preTimestamp) > velcityFilter) {
-        KeyCode leftKeyCode = XKeysymToKeycode(display, XK_Left);
 
-        XTestFakeKeyEvent(display, leftKeyCode, True, 0);
-        XTestFakeKeyEvent(display, leftKeyCode, False, 0);
-        XFlush(display);
-    } else if (m_preX < x && 
-               velcity(x - m_preX, timestamp - m_preTimestamp) > velcityFilter) {
-        KeyCode rightKeyCode = XKeysymToKeycode(display, XK_Right);
-
-        XTestFakeKeyEvent(display, rightKeyCode, True, 0);
-        XTestFakeKeyEvent(display, rightKeyCode, False, 0);
-        XFlush(display);
-    }
-
-    if (m_preZ == -200.0) 
+    if (m_preZ == -200.0)
         m_preZ = z;
-    if (z < m_preZ && 
-        velcity(m_preZ - z, timestamp - m_preTimestamp) > velcityFilter) {
-        // emit left top corner hot zone for KDE 
-        // 在KDE下触发Ctrl+F10唤出左上角热区
-        std::cout << "Emit left top corner hot zone" << std::endl;
-        KeyCode ctrlKeyCode = XKeysymToKeycode(display, XK_Control_L);
-        KeyCode f10KeyCode = XKeysymToKeycode(display, XK_F10);
+
+    if (abs(x - m_preX) > abs(z - m_preZ)) {
+        if (x < m_preX && 
+            velcity(m_preX - x, timestamp - m_preTimestamp) > velcityFilter) {
+            std::cout << "Emit rightwards" << std::endl;
+            KeyCode leftKeyCode = XKeysymToKeycode(display, XK_Left);
+
+            XTestFakeKeyEvent(display, leftKeyCode, True, 0);
+            XTestFakeKeyEvent(display, leftKeyCode, False, 0);
+            XFlush(display);
+        } else if (m_preX < x && 
+                   velcity(x - m_preX, timestamp - m_preTimestamp) > velcityFilter) {
+            std::cout << "Emit leftwards" << std::endl;
+            KeyCode rightKeyCode = XKeysymToKeycode(display, XK_Right);
+
+            XTestFakeKeyEvent(display, rightKeyCode, True, 0);
+            XTestFakeKeyEvent(display, rightKeyCode, False, 0);
+            XFlush(display);
+        }
+    } else {
+        if (z < m_preZ && 
+            velcity(m_preZ - z, timestamp - m_preTimestamp) > velcityFilter) {
+            // emit left top corner hot zone for KDE 
+            // 在KDE下触发Ctrl+F10唤出左上角热区
+            std::cout << "Emit left top corner hot zone" << std::endl;
+            KeyCode ctrlKeyCode = XKeysymToKeycode(display, XK_Control_L);
+            KeyCode f10KeyCode = XKeysymToKeycode(display, XK_F10);
             
-        XTestFakeKeyEvent(display, ctrlKeyCode, True, 0);
-        XTestFakeKeyEvent(display, f10KeyCode, True, 0);
-        XTestFakeKeyEvent(display, f10KeyCode, False, 0);
-        XTestFakeKeyEvent(display, ctrlKeyCode, False, 0);
-        XFlush(display);
+            XTestFakeKeyEvent(display, ctrlKeyCode, True, 0);
+            XTestFakeKeyEvent(display, f10KeyCode, True, 0);
+            XTestFakeKeyEvent(display, f10KeyCode, False, 0);
+            XTestFakeKeyEvent(display, ctrlKeyCode, False, 0);
+            XFlush(display);
+        }
     }
 
     // 移动鼠标
@@ -158,6 +164,7 @@ static void mouseClick(
 
 static void tapped() 
 {
+    std::cout << "Emit mouse click" << std::endl;
     mouseClick();
 }
 
