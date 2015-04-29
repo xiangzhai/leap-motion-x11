@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <iostream>
+#include <fstream>
 #include <X11/Xutil.h>
 #include <X11/extensions/XTest.h>
 
@@ -10,6 +11,8 @@
 
 static const float velcityFilter = 400.0;
 
+static bool enableRecord = false;
+static std::ofstream sampleFile;
 static Display* display = nullptr;
 static Window root = -1;
 static bool quit = false;
@@ -82,14 +85,12 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
     //std::cout << direction.roll() << std::endl;
 
     if (velcity[0] > velcityFilter) {
-        std::cout << "Emit rightwards" << std::endl;
         KeyCode leftKeyCode = XKeysymToKeycode(display, XK_Left);
 
         XTestFakeKeyEvent(display, leftKeyCode, True, 0);
         XTestFakeKeyEvent(display, leftKeyCode, False, 0);
         XFlush(display);
     } else if (velcity[0] < -velcityFilter) {
-        std::cout << "Emit leftwards" << std::endl;
         KeyCode rightKeyCode = XKeysymToKeycode(display, XK_Right);
 
         XTestFakeKeyEvent(display, rightKeyCode, True, 0);
@@ -97,9 +98,11 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
         XFlush(display);
     }
 
+    // It is able to change the hot key code based on your desktop enviroment
+    // such as KDE, GNOME, sort of ...
+    // 你可以根据自己的桌面环境修改热键值
     if (velcity[2] < -velcityFilter && !isCtrlF10) {
         isCtrlF10 = true;
-        std::cout << "Emit left top corner hot zone" << std::endl;
         KeyCode ctrlKeyCode = XKeysymToKeycode(display, XK_Control_L);
         KeyCode f10KeyCode = XKeysymToKeycode(display, XK_F10);
             
@@ -116,6 +119,11 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
     XWarpPointer(display, None, root, 0, 0, 0, 0, (x + 60) * screenWidth / 120, 
                  (z + 60) * screenHeight / 120);
     XFlush(display);
+
+    if (enableRecord) {
+        sampleFile << x << " "<< y << " " << z << "\n";
+        sampleFile.flush();
+    }
 }
 
 static void mouseClick(
@@ -161,7 +169,6 @@ static void mouseClick(
 static void tapped() 
 {
     isCtrlF10 = false;
-    std::cout << "Emit mouse click" << std::endl;
     mouseClick();
 }
 
@@ -169,8 +176,19 @@ int main(int argc, char* argv[])
 {
     MyListener listener;
     Controller controller;
-   
+    int c;
+
     signal(SIGINT, sig_handler);
+
+    while ((c = getopt(argc, argv, "r")) != -1) {
+        switch (c) {
+        case 'r':
+            std::cout << "Enable record sample" << std::endl;
+            enableRecord = true;
+            sampleFile.open("sample.txt");
+            break;
+        }
+    }
 
     display = XOpenDisplay(nullptr);
     if (display == nullptr) {
@@ -194,6 +212,8 @@ int main(int argc, char* argv[])
         XCloseDisplay(display);
         display = nullptr;
     }
+
+    sampleFile.close();
 
     return 0;
 }
