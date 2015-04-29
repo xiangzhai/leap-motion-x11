@@ -14,10 +14,11 @@ MOUSE CLICK event by XQueryPointer and XSendEvent 通过KEY_TAP和SCREEN_TYPE手
 
 so it is able to interactive with KDE, a famous desktop environment based on 
 X11 for Linux 因此它可以与KDE基于X11进行交互
-* move and left click the mouse 移动、点击鼠标
-* emit left top corner hot zone (hot key) 触发坐上角热区
+
+* move and left click the mouse 移动、点击鼠标 
+* emit left top corner hot zone (hot key) 触发坐上角热区 
 * generate left and right key press event when viewing photo or presentation 
-在看图片、ppt的时候产生左、右键盘事件
+在看图片、ppt的时候产生左、右键盘事件 
 
 
 ## Dependence for ArchLinux 依赖
