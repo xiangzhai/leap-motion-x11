@@ -66,3 +66,9 @@ Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
 
 Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
 
+
+## Sample 采样
+
+```
+./src/leap-motion-x11 -r
+```
