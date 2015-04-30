@@ -45,7 +45,7 @@ sudo make install
 ## HOWTO interactive with X11 怎么玩？与X11交互
 
 ```
-leap-motion-x11
+./src/leap-motion-x11
 ```
 
 * In the X and Z axis, move hand left/rightwards very fast, emit left and right 
