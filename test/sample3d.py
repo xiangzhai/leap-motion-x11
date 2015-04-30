@@ -5,11 +5,13 @@
 
 import sys
 import numpy as np
+from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 
 def parse_sample(filename='sample.txt'):
     x = []
     z = []
+    y = []
 
     f = open(filename)
     samples = f.readlines()
@@ -18,9 +20,11 @@ def parse_sample(filename='sample.txt'):
         arr = line.split(' ')
         x.append(float(arr[0]))
         z.append(float(arr[2]))
+        y.append(float(arr[1]))
 
-    plt.figure('original')
-    plt.plot(x, z)
+    fig = plt.figure('original')
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot_wireframe(x, z, y, rstride=10, cstride=10)
     plt.show()
 
 if __name__=='__main__':
