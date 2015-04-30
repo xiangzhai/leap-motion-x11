@@ -35,7 +35,6 @@ protected:
 private:
     PositionChanged m_positionChanged = nullptr;
     Tapped m_tapped = nullptr;
-    float m_preY = -200.0;
 };
 
 #endif // MY_LISTENER_H

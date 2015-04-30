@@ -56,17 +56,17 @@ void MyListener::onFrame(const Controller& controller)
     
     for (HandList::const_iterator hl = hands.begin(); hl != hands.end(); ++hl) {
         const Hand hand = *hl;
-        Vector position = hand.palmPosition();
+        // Smoothing and stabilization is performed in order to make this 
+        // value more suitable for interaction with 2D content. The stabilized 
+        // position lags behind the palm position by a variable amount, 
+        // depending primarily on the speed of movement.
+        Vector position = hand.stabilizedPalmPosition();
 
-        if (m_preY == -200.0)
-            m_preY = position[1];
         if (m_positionChanged)
             m_positionChanged(position[0], position[1], position[2], 
                               frame.fingers().extended().count(), 
                               hand.direction(),
                               hand.palmVelocity());
-
-        m_preY = position[1];
     }
 
     for (int g = 0; g < gestures.count(); ++g) {
