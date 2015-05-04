@@ -5,9 +5,9 @@ Leap Motion interactive with X11, just like [laser keyboard] (http://www.robopea
 
 It uses 它使用
 
-* palmPosition to move MOUSE CURSOR by XWarpPointer, and generate KEY PRESS 
-event by XTestFakeKeyEvent 借助XWrapPointer通过palmPosition的坐标来移动鼠标指针，
-借助XTestFakeKeyEvent产生键盘点击事件
+* stabilizedPalmPosition to move MOUSE CURSOR by XWarpPointer, and generate 
+KEY PRESS event by XTestFakeKeyEvent 借助XWrapPointer通过stabilizedPalmPosition
+的坐标来移动鼠标指针，借助XTestFakeKeyEvent产生键盘点击事件
 * Gesture::TYPE_KEY_TAP and Gesture::TYPE_SCREEN_TAP gestures to generate 
 MOUSE CLICK event by XQueryPointer and XSendEvent 通过KEY_TAP和SCREEN_TYPE手势
 借助XQueryPointer和XSendEvent产生鼠标点击事件
