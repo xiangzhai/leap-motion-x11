@@ -48,20 +48,22 @@ sudo make install
 ./src/leap-motion-x11
 ```
 
-* In the X and Z axis, move hand left/rightwards very fast, emit left and right 
-key press event when viewing photo or presentation 在水平面，向左、右快速移动
+![ScreenShot](https://developer-china-cdn.leapmotion.com/documentation/images/Leap_Axes.png)
+
+* In the X-Z plane, move hand left or rightwards quickly, emit left and right 
+key press event when viewing photo or presentation 在X-Z水平面，向左、右快速移动
 手掌，触发向左、右键盘事件，可以用来看图片、ppt
 
 Demo video 演示视频 http://v.youku.com/v_show/id_XOTQ0NDQ0NjQ4.html
 
-* In the X and Z axis, move hand upwards very fast, emit the left top corner 
-hot zone, move hand in the active windows, click one window to raise it for KDE
-在水平面，快速做向上的动作，触发KDE左上角热区，在活跃窗体之间游走，点击某个窗体，
+* In the X-Z plane, move hand forwards quickly, emit the left top corner hot 
+zone, move hand between the active windows, tap (click) one to raise it up
+在X-Z水平面，快速做向前的动作，触发左上角热区，在活跃窗体之间游走，点击某个窗体，
 抬起该窗体
 
 Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
 
-* In the X and Z axis, move hand and click by your finger 在水平面，移动手掌，
+* In the X-Z plane, move hand and tap (click) by your finger 在X-Z水平面，移动手掌，
 用食指做点击动作
 
 Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
