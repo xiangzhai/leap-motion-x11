@@ -2,7 +2,7 @@ project(leap-motion-x11)
 
 cmake_minimum_required(VERSION 2.8.11)
 
-add_definitions(-std=c++11 -Werror -g)
+add_definitions(-std=c++11 -fpermissive -g)
 
 find_package(X11 REQUIRED)
 find_package(PkgConfig REQUIRED)

@@ -18,13 +18,75 @@ static Window root = -1;
 static bool quit = false;
 static bool pressedCtrlF10 = false;
 static float prePinchStrength = .0;
+static bool grabbed = false;
+static float preGrabStrength = .0;
 
-static void sig_handler(int sig)
+static void sigHandler(int sig)
 {
     if (sig == SIGINT) {
         std::cout << "Bye ;-)" << std::endl;
         quit = true;
     }
+}
+
+unsigned char* getWindowProperty(Window window, Atom atom, long *nitems, 
+                                 Atom *type, int *size) 
+{
+    Atom actual_type;
+    int actual_format;
+    unsigned long _nitems;
+    unsigned long bytes_after; /* unused */
+    unsigned char *prop;
+    int status;
+
+    status = XGetWindowProperty(display, window, atom, 0, (~0L),
+                                False, AnyPropertyType, &actual_type,
+                                &actual_format, &_nitems, &bytes_after,
+                                &prop);
+    if (status == BadWindow)
+        return NULL;
+    if (status != Success)
+        return NULL;
+
+    if (nitems != NULL)
+        *nitems = _nitems;
+
+    if (type != NULL)
+        *type = actual_type;
+
+    if (size != NULL)
+        *size = actual_format;
+
+    return prop;
+}
+
+static void getActiveWindow(Window *window_ret)
+{
+    Atom type;
+    int size;
+    long nitems;
+    unsigned char *data;
+    Atom request;
+
+    request = XInternAtom(display, "_NET_ACTIVE_WINDOW", False);
+    data = getWindowProperty(root, request, &nitems, &type, &size);
+    if (nitems > 0)
+        *window_ret = *((Window*)data); 
+    
+    if (data) {
+        free(data);
+        data = NULL;
+    }
+}
+
+static void moveWindow(Window wid, int x, int y) 
+{
+    XWindowChanges wc;
+
+    wc.x = x;
+    wc.y = y;
+    XConfigureWindow(display, wid, CWX | CWY, &wc);
+    XFlush(display);
 }
 
 // 
@@ -60,6 +122,7 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
     int screen = 0;
     int screenWidth = DisplayWidth(display, screen);
     int screenHeight = DisplayHeight(display, screen);
+    Window wid = 0;
 
     // Pitch is the angle between the negative z-axis and the projection of the 
     // vector onto the y-z plane. In other words, pitch represents rotation 
@@ -114,6 +177,11 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
         XFlush(display);
     }
 
+    if (grabbed) {
+        getActiveWindow(&wid);
+        moveWindow(wid, (x + 60) * screenWidth / 120, (z + 60) * screenHeight / 120);
+    }
+
     // Move mouse cursor 
     // 移动鼠标
     XSelectInput(display, root, KeyReleaseMask);
@@ -122,7 +190,7 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
     XFlush(display);
 
     if (enableRecord) {
-        sampleFile << x << " "<< y << " " << z << "\n";
+        sampleFile << x << " " << y << " " << z << "\n";
         sampleFile.flush();
     }
 }
@@ -196,13 +264,21 @@ static void pinch(float strength)
     prePinchStrength = strength;
 }
 
+static void grab(float strength) 
+{
+    if (strength == 1.0)
+        grabbed = true;
+    else
+        grabbed = false;
+}
+
 int main(int argc, char* argv[]) 
 {
     MyListener listener;
     Controller controller;
     int c;
 
-    signal(SIGINT, sig_handler);
+    signal(SIGINT, sigHandler);
 
     while ((c = getopt(argc, argv, "r")) != -1) {
         switch (c) {
@@ -225,6 +301,7 @@ int main(int argc, char* argv[])
     listener.setPositionChanged(positionChanged);
     listener.setTapped(tapped);
     listener.setPinch(pinch);
+    listener.setGrab(grab);
     controller.addListener(listener);
 
     while (!quit) 

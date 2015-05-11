@@ -10,6 +10,7 @@ using namespace Leap;
 typedef void (*PositionChanged)(float, float, float, int, Vector, Vector);
 typedef void (*Tapped)();
 typedef void (*Pinch)(float);
+typedef void (*Grab)(float);
 
 class MyListener : public Listener 
 {
@@ -20,6 +21,7 @@ public:
     void setPositionChanged(PositionChanged fptr);
     void setTapped(Tapped fptr);
     void setPinch(Pinch fptr);
+    void setGrab(Grab fptr);
 
 protected:
     virtual void onInit(const Controller&);                                        
@@ -37,6 +39,7 @@ private:
     PositionChanged m_positionChanged = nullptr;
     Tapped m_tapped = nullptr;
     Pinch m_pinch = nullptr;
+    Grab m_grab = nullptr;
 };
 
 #endif // MYLISTENER_H

@@ -1,7 +1,7 @@
 leap-motion-x11
 ----------------
 
-Leap Motion interactive with X11, just like [laser keyboard] (http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘] (http://www.robopeak.com/blog/?p=315)
+Leap Motion [Interactive with X11] (https://developer.leapmotion.com/gallery/interactive-with-x11) just like [laser keyboard] (http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘] (http://www.robopeak.com/blog/?p=315)
 
 It uses 它使用
 
@@ -12,8 +12,7 @@ KEY PRESS event by XTestFakeKeyEvent 借助XWrapPointer通过stabilizedPalmPosit
 MOUSE CLICK event by XQueryPointer and XSendEvent 通过KEY_TAP和SCREEN_TYPE手势
 借助XQueryPointer和XSendEvent产生鼠标点击事件
 
-so it is able to interactive with KDE, a famous desktop environment based on 
-X11 for Linux 因此它可以与KDE基于X11进行交互
+so it is able to interactive with KDE - a famous desktop environment based on X11 for Linux 因此它可以与KDE基于X11进行交互
 
 * move and left click the mouse 移动、点击鼠标 
 * emit left top corner hot zone (hot key) 触发坐上角热区 
@@ -70,6 +69,7 @@ Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
 
 * In the X-Z plane, pinch in/out to zoom in/out KDE desktop 在X-Z水平面，缩放桌面
 
+* In the X-Z plane, grab to move active window 在X-Z水平面，抓着活动窗体移动
 
 ## Sample 采样
 

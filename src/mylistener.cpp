@@ -29,6 +29,11 @@ void MyListener::setPinch(Pinch fptr)
     m_pinch = fptr;
 }
 
+void MyListener::setGrab(Grab fptr) 
+{
+    m_grab = fptr;
+}
+
 void MyListener::onInit(const Controller& controller) 
 { 
     std::cout << "Initialized" << std::endl;
@@ -75,6 +80,9 @@ void MyListener::onFrame(const Controller& controller)
 
         if (m_pinch)
             m_pinch(hand.pinchStrength());
+
+        if (m_grab)
+            m_grab(hand.grabStrength());
     }
 
     for (int g = 0; g < gestures.count(); ++g) {
