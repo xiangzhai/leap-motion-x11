@@ -243,6 +243,9 @@ static void tapped()
 
 static void pinch(float strength) 
 {
+    if (grabbed)
+        return;
+    
     KeyCode superKeyCode = XKeysymToKeycode(display, XK_Super_L);
     KeyCode plusKeyCode = XKeysymToKeycode(display, XK_plus);
     KeyCode minusKeyCode = XKeysymToKeycode(display, XK_minus);
