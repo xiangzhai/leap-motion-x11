@@ -35,7 +35,7 @@ unsigned char* getWindowProperty(Window window, Atom atom, long *nitems,
     Atom actual_type;
     int actual_format;
     unsigned long _nitems;
-    unsigned long bytes_after; /* unused */
+    unsigned long bytes_after;
     unsigned char *prop;
     int status;
 
@@ -110,12 +110,6 @@ static void moveWindow(Window wid, int x, int y)
 // 
 // Matrix transform to current X11 screen resoluation 
 // 坐标转换到当前分辨率下的X11“屏幕”坐标系
-//
-// FIXME: 
-// Because palm might be slightly shake, so it needs to do Curve Smooth to make
-// mouse cursor movement more smooth 
-// 由于手掌是有轻微抖动的，所以需要做曲线拟合（平滑）使得鼠标移动更加平滑
-//
 static void positionChanged(float x, float y, float z, int extendedFingers, 
                             Vector direction, Vector velcity) 
 {
@@ -177,6 +171,8 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
         XFlush(display);
     }
 
+    // Move active window
+    // 移动活跃窗体
     if (grabbed) {
         getActiveWindow(&wid);
         moveWindow(wid, (x + 60) * screenWidth / 120, (z + 60) * screenHeight / 120);
