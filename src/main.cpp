@@ -16,7 +16,8 @@ static std::ofstream sampleFile;
 static Display* display = nullptr;
 static Window root = -1;
 static bool quit = false;
-static bool isCtrlF10 = false;
+static bool pressedCtrlF10 = false;
+static float prePinchStrength = .0;
 
 static void sig_handler(int sig)
 {
@@ -101,8 +102,8 @@ static void positionChanged(float x, float y, float z, int extendedFingers,
     // It is able to change the hot key code based on your desktop enviroment
     // such as KDE, GNOME, sort of ...
     // 你可以根据自己的桌面环境修改热键值
-    if (velcity[2] < -velcityFilter && !isCtrlF10) {
-        isCtrlF10 = true;
+    if (velcity[2] < -velcityFilter && !pressedCtrlF10) {
+        pressedCtrlF10 = true;
         KeyCode ctrlKeyCode = XKeysymToKeycode(display, XK_Control_L);
         KeyCode f10KeyCode = XKeysymToKeycode(display, XK_F10);
             
@@ -168,8 +169,31 @@ static void mouseClick(
 
 static void tapped() 
 {
-    isCtrlF10 = false;
+    pressedCtrlF10 = false;
     mouseClick();
+}
+
+static void pinch(float strength) 
+{
+    KeyCode superKeyCode = XKeysymToKeycode(display, XK_Super_L);
+    KeyCode plusKeyCode = XKeysymToKeycode(display, XK_plus);
+    KeyCode minusKeyCode = XKeysymToKeycode(display, XK_minus);
+
+    if (strength - prePinchStrength > 0.05) {
+        XTestFakeKeyEvent(display, superKeyCode, True, 0);
+        XTestFakeKeyEvent(display, plusKeyCode, True, 0);
+        XTestFakeKeyEvent(display, plusKeyCode, False, 0);
+        XTestFakeKeyEvent(display, superKeyCode, False, 0);
+        XFlush(display);
+    } else if (prePinchStrength > strength) {
+        XTestFakeKeyEvent(display, superKeyCode, True, 0);
+        XTestFakeKeyEvent(display, minusKeyCode, True, 0);
+        XTestFakeKeyEvent(display, minusKeyCode, False, 0);
+        XTestFakeKeyEvent(display, superKeyCode, False, 0);
+        XFlush(display);
+    }
+
+    prePinchStrength = strength;
 }
 
 int main(int argc, char* argv[]) 
@@ -200,6 +224,7 @@ int main(int argc, char* argv[])
 
     listener.setPositionChanged(positionChanged);
     listener.setTapped(tapped);
+    listener.setPinch(pinch);
     controller.addListener(listener);
 
     while (!quit) 

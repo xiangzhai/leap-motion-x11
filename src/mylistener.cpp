@@ -24,6 +24,11 @@ void MyListener::setTapped(Tapped fptr)
     m_tapped = fptr;
 }
 
+void MyListener::setPinch(Pinch fptr) 
+{
+    m_pinch = fptr;
+}
+
 void MyListener::onInit(const Controller& controller) 
 { 
     std::cout << "Initialized" << std::endl;
@@ -67,6 +72,9 @@ void MyListener::onFrame(const Controller& controller)
                               frame.fingers().extended().count(), 
                               hand.direction(),
                               hand.palmVelocity());
+
+        if (m_pinch)
+            m_pinch(hand.pinchStrength());
     }
 
     for (int g = 0; g < gestures.count(); ++g) {
@@ -78,7 +86,6 @@ void MyListener::onFrame(const Controller& controller)
                 m_tapped();
             break;
         case Gesture::TYPE_SWIPE:
-            std::cout << "Swip gesture is very difficult to experience?!" << std::endl;
             break;
         }
     }

@@ -1,15 +1,15 @@
 // Copyright (C) 2015 Leslie Zhai <xiang.zhai@i-soft.com.cn>
 
-#ifndef MY_LISTENER_H
-#define MY_LISTENER_H
+#ifndef MYLISTENER_H
+#define MYLISTENER_H
 
 #include <Leap.h>
 
 using namespace Leap;
 
-typedef void (*PositionChanged)(float, float, float, int, Vector direction, 
-                                Vector velcity);
+typedef void (*PositionChanged)(float, float, float, int, Vector, Vector);
 typedef void (*Tapped)();
+typedef void (*Pinch)(float);
 
 class MyListener : public Listener 
 {
@@ -19,6 +19,7 @@ public:
 
     void setPositionChanged(PositionChanged fptr);
     void setTapped(Tapped fptr);
+    void setPinch(Pinch fptr);
 
 protected:
     virtual void onInit(const Controller&);                                        
@@ -35,6 +36,7 @@ protected:
 private:
     PositionChanged m_positionChanged = nullptr;
     Tapped m_tapped = nullptr;
+    Pinch m_pinch = nullptr;
 };
 
-#endif // MY_LISTENER_H
+#endif // MYLISTENER_H

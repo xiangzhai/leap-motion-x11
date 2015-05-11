@@ -68,6 +68,8 @@ Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
 
 Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
 
+* In the X-Z plane, pinch in/out to zoom in/out KDE desktop 在X-Z水平面，缩放桌面
+
 
 ## Sample 采样
 
