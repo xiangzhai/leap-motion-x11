@@ -71,6 +71,8 @@ Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzMDExNjY4.html
 
 * In the X-Z plane, grab to move active window 在X-Z水平面，抓着活动窗体移动
 
+Demo video 演示视频 http://v.youku.com/v_show/id_XOTUzMTc3NjAw.html
+
 ## Sample 采样
 
 ```
