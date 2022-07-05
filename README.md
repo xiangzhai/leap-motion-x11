@@ -1,7 +1,7 @@
 leap-motion-x11
 ----------------
 
-Leap Motion [Interactive with X11] (https://developer.leapmotion.com/gallery/interactive-with-x11) just like [laser keyboard] (http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘] (http://www.robopeak.com/blog/?p=315)
+Leap Motion [Interactive with X11](https://developer.leapmotion.com/gallery/interactive-with-x11) just like [laser keyboard](http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘](http://www.robopeak.com/blog/?p=315)
 
 It uses 它使用
 
