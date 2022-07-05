@@ -1,7 +1,7 @@
 leap-motion-x11
 ----------------
 
-Leap Motion [Interactive with X11](https://developer.leapmotion.com/gallery/interactive-with-x11) just like [laser keyboard](http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘](http://www.robopeak.com/blog/?p=315)
+Leap Motion [Interactive with X11](https://developer-archive.leapmotion.com/gallery/interactive-with-x11) just like [laser keyboard](http://www.robopeak.com/blog/?p=282) Leap Motion与X11交互，类似[激光键盘](http://www.robopeak.com/blog/?p=315)
 
 It uses 它使用
 
@@ -60,7 +60,7 @@ zone, move hand between the active windows, tap (click) one to raise it up
 在X-Z水平面，快速做向前的动作，触发左上角热区，在活跃窗体之间游走，点击某个窗体，
 抬起该窗体
 
-Demo video 演示视频 http://v.youku.com/v_show/id_XOTQzNTMxMTQ0.html
+Demo video 演示视频 https://v.youku.com/v_show/id_XOTUzMTc3NjAw
 
 * In the X-Z plane, move hand and tap (click) by your finger 在X-Z水平面，移动手掌，
 用食指做点击动作
